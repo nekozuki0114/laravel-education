@@ -14,7 +14,10 @@ class MovieController extends Controller
     public function index()
     {
         //
-        return Movies::get();
+        $movies = Movies::get();
+        return view('test', [
+            "movies" => $movies
+        ]);
     }
 
     /**
@@ -25,6 +28,7 @@ class MovieController extends Controller
     public function create()
     {
         //
+
     }
 
     /**
@@ -36,6 +40,14 @@ class MovieController extends Controller
     public function store(Request $request)
     {
         //
+        try{
+            Movies::create(
+                ['title' => $request->title,
+                'image_url' => $request->image_url]);
+            return 200;
+        } catch (error $e) {
+            return $e->getMessage();
+        }
     }
 
     /**
@@ -71,6 +83,12 @@ class MovieController extends Controller
     public function update(Request $request, $id)
     {
         //
+        try{
+            Movies::find($id)->update(['title'=>$request->title,'image_url'=>$request->image_url]);
+            return 200;
+        } catch (error $e) {
+            return $e->getMessage();
+        }
     }
 
     /**
@@ -82,5 +100,6 @@ class MovieController extends Controller
     public function destroy($id)
     {
         //
+        Movies::find($id)->delete();
     }
 }
