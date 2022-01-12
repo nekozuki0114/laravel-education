@@ -1,0 +1,39 @@
+version: "3.8"
+volumes:
+  php-fpm-socket:
+services:
+  laravel:
+    container_name: laravel
+    build:
+      context: ./docker/php
+      dockerfile: Dockerfile
+    volumes:
+      - php-fpm-socket:/var/run/php-fpm
+      - ./laravel:/workspace/laravel
+
+  nginx:
+    container_name: nginx
+    build:
+      context: ./docker/nginx
+      dockerfile: Dockerfile
+    ports:
+      - 8080:80
+    volumes:
+      - php-fpm-socket:/var/run/php-fpm
+      - ./laravel:/workspace/laravel
+
+  postgres:
+    container_name: postgres
+    build:
+      context: ./docker/postgres
+      dockerfile: Dockerfile
+    command: postgres -c log_destination=stderr -c log_statement=all -c log_connections=on -c log_disconnections=on
+    # volumes:
+    #   - ./docker/postgres/initdb:/docker-entrypoint-initdb.d
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DATABASE=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_ROOT_PASSWORD=root
