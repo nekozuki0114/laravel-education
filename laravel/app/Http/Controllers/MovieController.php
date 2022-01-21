@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Movies;
+use App\Models\Movie;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreRequest;
 use App\Http\Requests\UpdateRequest;
@@ -16,7 +16,7 @@ class MovieController extends Controller
     public function index()
     {
         //
-        $movies = Movies::orderBy('id', 'asc')->get();
+        $movies = Movie::orderBy('id', 'asc')->get();
         return view('movie/index', [
             "movies" => $movies
         ]);
@@ -43,7 +43,7 @@ class MovieController extends Controller
     public function store(StoreRequest $request)
     {
         //
-        Movies::create(['title'=>$request->title,'image_url'=>'https://via.placeholder.com/100x100.png/0000cc?text='.$request->title]);
+        Movie::create(['title'=>$request->title,'image_url'=>'https://via.placeholder.com/100x100.png/0000cc?text='.$request->title]);
         return redirect()->route('movie.index')->with('success', '200');
     }
 
@@ -55,7 +55,7 @@ class MovieController extends Controller
      */
     public function show($id)
     {
-        $movie = Movies::find($id);
+        $movie = Movie::find($id);
         return view('movie/show', ["movie" => $movie]);
     }
 
@@ -68,7 +68,7 @@ class MovieController extends Controller
     public function edit($id)
     {
         //
-        $movie = Movies::find($id);
+        $movie = Movie::find($id);
         return view('movie/edit', ["movie" => $movie]);
     }
 
@@ -81,7 +81,7 @@ class MovieController extends Controller
      */
     public function update(UpdateRequest $request, $id)
     {
-        Movies::find($id)->update(['title'=>$request->title,'image_url'=>'https://via.placeholder.com/100x100.png/0000cc?text='.$request->title]);
+        Movie::find($id)->update(['title'=>$request->title,'image_url'=>'https://via.placeholder.com/100x100.png/0000cc?text='.$request->title]);
         return redirect()->route('movie.index')->with('success', '200');
     }
 
@@ -94,7 +94,7 @@ class MovieController extends Controller
     public function destroy($id)
     {
         //
-        Movies::where('id', $id)->delete();
+        Movie::where('id', $id)->delete();
         return redirect()->route('movie.index')->with('success', '200');
     }
 }
