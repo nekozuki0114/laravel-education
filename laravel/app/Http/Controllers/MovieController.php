@@ -55,7 +55,7 @@ class MovieController extends Controller
      */
     public function show($id)
     {
-        $movie = Movie::find($id);
+        $movie = Movie::findOrFail($id);
         return view('movie/show', ["movie" => $movie]);
     }
 
@@ -68,7 +68,7 @@ class MovieController extends Controller
     public function edit($id)
     {
         //
-        $movie = Movie::find($id);
+        $movie = Movie::findOrFail($id);
         return view('movie/edit', ["movie" => $movie]);
     }
 
@@ -81,7 +81,7 @@ class MovieController extends Controller
      */
     public function update(UpdateRequest $request, $id)
     {
-        Movie::find($id)->update(['title'=>$request->title,'image_url'=>'https://via.placeholder.com/100x100.png/0000cc?text='.$request->title]);
+        Movie::findOrFail($id)->update(['title'=>$request->title,'image_url'=>'https://via.placeholder.com/100x100.png/0000cc?text='.$request->title]);
         return redirect()->route('movie.index')->with('success', '200');
     }
 
