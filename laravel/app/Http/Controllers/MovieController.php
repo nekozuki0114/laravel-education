@@ -17,9 +17,7 @@ class MovieController extends Controller
     {
         //
         $movies = Movie::orderBy('id', 'asc')->get();
-        return view('movie/index', [
-            "movies" => $movies
-        ]);
+        return view('movie/index', ["movies" => $movies]);
     }
 
     /**
@@ -43,7 +41,10 @@ class MovieController extends Controller
     public function store(StoreRequest $request)
     {
         //
-        Movie::create(['title'=>$request->title,'image_url'=>'https://via.placeholder.com/100x100.png/0000cc?text='.$request->title]);
+        Movie::create([
+            'title'=>$request->title,
+            'image_url'=>'https://via.placeholder.com/100x100.png/0000cc?text='.$request->title
+        ]);
         return redirect()->route('movie.index')->with('success', '200');
     }
 
@@ -81,7 +82,11 @@ class MovieController extends Controller
      */
     public function update(UpdateRequest $request, $id)
     {
-        Movie::findOrFail($id)->update(['title'=>$request->title,'image_url'=>'https://via.placeholder.com/100x100.png/0000cc?text='.$request->title]);
+        Movie::findOrFail($id)
+        ->update([
+            'title'=>$request->title,
+            'image_url'=>'https://via.placeholder.com/100x100.png/0000cc?text='.$request->title
+        ]);
         return redirect()->route('movie.index')->with('success', '200');
     }
 
