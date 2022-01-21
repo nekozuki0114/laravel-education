@@ -14,9 +14,11 @@ class MoviesFactory extends Factory
      */
     public function definition()
     {
+        $title = $this->faker->name(); // 画像に記述する文字列をランダム生成
         return [
-            'title' => $this->faker->name(),
-            'image_url' => $this->faker->safeEmail(),
+
+            'title' => $title,
+            'image_url' => $this->faker->imageUrl(100,100,$title)
         ];
     }
 }

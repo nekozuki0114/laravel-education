@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use App\Models\Movies;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreRequest;
+use App\Http\Requests\UpdateRequest;
 
 class MovieController extends Controller
 {
@@ -14,8 +16,8 @@ class MovieController extends Controller
     public function index()
     {
         //
-        $movies = Movies::get();
-        return view('test', [
+        $movies = Movies::orderBy('id', 'asc')->get();
+        return view('movie/index', [
             "movies" => $movies
         ]);
     }
@@ -28,6 +30,7 @@ class MovieController extends Controller
     public function create()
     {
         //
+        return view('movie/create');
 
     }
 
@@ -37,17 +40,11 @@ class MovieController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
         //
-        try{
-            Movies::create(
-                ['title' => $request->title,
-                'image_url' => $request->image_url]);
-            return 200;
-        } catch (error $e) {
-            return $e->getMessage();
-        }
+        Movies::create(['title'=>$request->title,'image_url'=>'https://via.placeholder.com/100x100.png/0000cc?text='.$request->title]);
+        return redirect()->route('movie.index')->with('success', '200');
     }
 
     /**
@@ -58,8 +55,8 @@ class MovieController extends Controller
      */
     public function show($id)
     {
-        //
-        return movies::find($id);
+        $movie = Movies::find($id);
+        return view('movie/show', ["movie" => $movie]);
     }
 
     /**
@@ -71,6 +68,8 @@ class MovieController extends Controller
     public function edit($id)
     {
         //
+        $movie = Movies::find($id);
+        return view('movie/edit', ["movie" => $movie]);
     }
 
     /**
@@ -80,15 +79,10 @@ class MovieController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateRequest $request, $id)
     {
-        //
-        try{
-            Movies::find($id)->update(['title'=>$request->title,'image_url'=>$request->image_url]);
-            return 200;
-        } catch (error $e) {
-            return $e->getMessage();
-        }
+        Movies::find($id)->update(['title'=>$request->title,'image_url'=>'https://via.placeholder.com/100x100.png/0000cc?text='.$request->title]);
+        return redirect()->route('movie.index')->with('success', '200');
     }
 
     /**
@@ -100,6 +94,7 @@ class MovieController extends Controller
     public function destroy($id)
     {
         //
-        Movies::find($id)->delete();
+        Movies::where('id', $id)->delete();
+        return redirect()->route('movie.index')->with('success', '200');
     }
 }
